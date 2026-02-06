@@ -145,6 +145,28 @@ The code automatically uses `MODEL_PROXY_API_KEY` and `MODEL_PROXY_API_BASE` env
 pip install -r requirements.txt
 ```
 
+## Dataloader Fix
+
+This project includes a patch script to fix a TypeError in the AgentTorch dataloader when handling string/object data types. The error occurs when `LoadPopulation` tries to convert numpy.object arrays to PyTorch tensors.
+
+**Apply the fix:**
+
+```bash
+python apply_dataloader_fix.py
+```
+
+This script will:
+1. Locate the `agent_torch/core/dataloader.py` file in your Python environment
+2. Add the `_fix_df` function that converts object-type columns to numeric types
+3. Update the tensor creation to use the fixed DataFrame
+
+The fix handles:
+- Object-type columns: Converts to numeric if >50% can be converted, otherwise uses categorical codes
+- Boolean columns: Converts to int8
+- Ensures all data types are compatible with PyTorch tensors
+
+**Note:** This fix must be applied after installing AgentTorch but before running simulations. The script is idempotent and can be run multiple times safely.
+
 ## Output
 
 The simulation generates:
